@@ -1,0 +1,15 @@
+machine:
+  php:
+    version: 
+      - 7.0.4
+      - 7.1.0
+  timezone:
+    Europe/Paris
+dependencies:
+  pre:
+    - cp .env.example .env
+  post:
+    - php artisan key:generate
+test:
+  override:
+    - vendor/bin/phpunit --verbose
