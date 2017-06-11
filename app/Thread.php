@@ -60,4 +60,15 @@ class Thread extends Model
 
         return $this;
     }
+
+    /**
+     * @param $query
+     * @param $filters
+     *
+     * @return mixed
+     */
+    public function scopeFilter($query, $filters)
+    {
+        return $filters->apply($query);
+    }
 }
