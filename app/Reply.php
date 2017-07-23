@@ -21,6 +21,11 @@ class Reply extends Model
         return $this->morphMany(Favorite::class, 'favorited');
     }
 
+    /**
+     * Favorite the reply by the current user.
+     *
+     * @return Model
+     */
     public function favorite()
     {
         $attributes = ['user_id' => auth()->id()];
@@ -28,5 +33,15 @@ class Reply extends Model
         if (!$this->favorites()->where($attributes)->exists()) {
             return $this->favorites()->create($attributes);
         }
+    }
+
+    /**
+     * Check if the reply has been favorited by the current user.
+     *
+     * @return mixed
+     */
+    public function isFavorited()
+    {
+        return $this->favorites()->where('user_id', auth()->id())->exists();
     }
 }
