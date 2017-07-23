@@ -12,8 +12,27 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    <script>
+        window.Laravel = {!! json_encode([
+            'csrfToken' => csrf_token()
+        ]) !!};
+    </script>
+
+    <style>
+        body {
+            padding-bottom: 50px;
+        }
+        .level {
+            display: flex;
+            align-items: center;
+        }
+        .flex {
+            flex: 1;
+        }
+    </style>
 </head>
-<body style="padding-bottom: 50px;">
+<body>
     <div id="app">
         <nav class="navbar navbar-default navbar-static-top">
             <div class="container">
@@ -41,9 +60,12 @@
                                aria-haspopup="true" aria-expanded="false">Browse <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href="/threads">All threads</a></li>
+                                
                                 @if(auth()->check())
                                     <li><a href="/threads?by={{ auth()->user()->name }}">My threads</a></li>
                                 @endif
+                                
+                                <li><a href="/threads?popular=1">Popular threads</a></li>
                             </ul>
                         </li>
 

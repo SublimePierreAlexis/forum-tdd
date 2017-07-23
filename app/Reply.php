@@ -13,8 +13,20 @@ class Reply extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function renderPublic()
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function favorites()
     {
-        return ['name', 'body'];
+        return $this->morphMany(Favorite::class, 'favorited');
+    }
+
+    public function favorite()
+    {
+        $attributes = ['user_id' => auth()->id()];
+
+        if (!$this->favorites()->where($attributes)->exists()) {
+            return $this->favorites()->create($attributes);
+        }
     }
 }
