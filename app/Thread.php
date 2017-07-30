@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property mixed   creator
  * @property mixed   replies
  * @property mixed   channel
+ * @property mixed   user_id
  */
 class Thread extends Model
 {

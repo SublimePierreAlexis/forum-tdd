@@ -12,12 +12,14 @@
                                 {{ $thread->title }}
                             </span>
 
-                            <form action="{{ $thread->path() }}" method="POST">
-                                {{ csrf_field() }}
-                                {{ method_field('DELETE') }}
+                            @can('update', $thread)
+                                <form action="{{ $thread->path() }}" method="POST">
+                                    {{ csrf_field() }}
+                                    {{ method_field('DELETE') }}
 
-                                <button type="submit" class="btn btn-link">Delete Thread</button>
-                            </form>
+                                    <button type="submit" class="btn btn-link">Delete Thread</button>
+                                </form>
+                            @endcan
                         </div>
                     </div>
 
@@ -36,13 +38,15 @@
                     <form action="{{ $thread->path() .'/replies' }}" method="POST">
                         {{ csrf_field() }}
                         <div class="form-group">
-                            <textarea placeholder="Have something to say?" name="body" id="body" cols="30" rows="5" class="form-control"></textarea>
+                            <textarea placeholder="Have something to say?" name="body" id="body" cols="30" rows="5"
+                                      class="form-control"></textarea>
                         </div>
 
                         <button type="submit" class="btn btn-default">Submit</button>
                     </form>
                 @else
-                    <p class="text-center" >Please <a href="{{ route('login') }}">sign in</a> to participate in the discussion.</p>
+                    <p class="text-center">Please <a href="{{ route('login') }}">sign in</a> to participate in the
+                        discussion.</p>
                 @endif
 
             </div>
