@@ -30,7 +30,7 @@ class Thread extends Model
         });
 
         static::deleting(function ($thread) {
-            $thread->replies()->delete();
+            $thread->replies->each->delete();
         });
     }
 
@@ -70,6 +70,7 @@ class Thread extends Model
      * Add a reply to a thread.
      *
      * @param $reply
+     *
      * @return $this
      */
     public function addReply($reply)
