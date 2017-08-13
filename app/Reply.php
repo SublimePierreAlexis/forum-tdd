@@ -14,9 +14,20 @@ class Reply extends Model
 {
     use Favoritable, RecordsActivity;
 
+    /**
+     * @var array
+     */
     protected $guarded = [];
 
+    /**
+     * @var array
+     */
     protected $with = ['owner', 'favorites'];
+
+    /**
+     * @var array
+     */
+    protected $appends = ['favoritesCount', 'isFavorited'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -34,6 +45,9 @@ class Reply extends Model
         return $this->belongsTo(Thread::class);
     }
 
+    /**
+     * @return string
+     */
     public function path()
     {
         return $this->thread->path() . "#reply-{$this->id}";
