@@ -16,8 +16,7 @@ class ParticipateInThreadsTest extends TestCase
     {
         $this->withExceptionHandling()
             ->post('/threads/some-channel/1/replies', [])
-            ->assertRedirect('/login')
-        ;
+            ->assertRedirect('/login');
     }
 
     /** @test */
@@ -28,7 +27,7 @@ class ParticipateInThreadsTest extends TestCase
         $thread = create('App\Thread');
         $reply = make('App\Reply');
 
-        $this->post($thread->path().'/replies', $reply->toArray());
+        $this->post($thread->path() . '/replies', $reply->toArray());
 
         $this->get($thread->path())
             ->assertSee($reply->body);
@@ -42,7 +41,64 @@ class ParticipateInThreadsTest extends TestCase
         $thread = create('App\Thread');
         $reply = make('App\Reply', ['body' => null]);
 
-        $this->post($thread->path().'/replies', $reply->toArray())
+        $this->post($thread->path() . '/replies', $reply->toArray())
             ->assertSessionHasErrors('body');
+    }
+
+    /** @test */
+    public function unauthorized_users_cannot_delete_replies()
+    {
+        $this->withExceptionHandling();
+
+        $reply = create('App\Reply');
+
+        $this->delete("/replies/{$reply->id}")
+            ->assertRedirect('login');
+
+        $this->signIn()
+            ->delete("/replies/{$reply->id}")
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function authorized_users_can_delete_replies()
+    {
+        $this->signIn();
+        $reply = create('App\Reply', ['user_id' => auth()->id()]);
+
+        $this->delete("/replies/{$reply->id}")->assertStatus(302);
+        $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+    }
+
+    /** @test */
+    public function authorized_users_can_update_replies()
+    {
+        $this->signIn();
+        $reply = create('App\Reply', ['user_id' => auth()->id()]);
+
+        $updatedReply = "You been changed, fool.";
+        $this->patch("/replies/{$reply->id}", [
+            'body' => $updatedReply,
+        ]);
+
+        $this->assertDatabaseHas('replies', [
+            'id'   => $reply->id,
+            'body' => $updatedReply,
+        ]);
+    }
+
+    /** @test */
+    function unauthenticated_users_cannot_update_replies()
+    {
+        $reply = create('App\Reply');
+
+        $this->withExceptionHandling();
+
+        $this->patch("/replies/{$reply->id}")
+            ->assertRedirect('/login');
+
+        $this->signIn()
+            ->patch("/replies/{$reply->id}")
+            ->assertStatus(403);
     }
 }
