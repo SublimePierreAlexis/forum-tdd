@@ -29,24 +29,9 @@
                         </div>
                     </div>
 
-                    <replies :data="{{ $thread->replies }}" @removed="repliesCount--"></replies>
+                    <replies :data="{{ $thread->replies }}" @removed="repliesCount--" @added="repliesCount++"></replies>
 
                     {{--{{ $replies->links() }}--}}
-
-                    @if (auth()->check())
-                        <form action="{{ $thread->path() .'/replies' }}" method="POST">
-                            {{ csrf_field() }}
-                            <div class="form-group">
-                            <textarea placeholder="Have something to say?" name="body" id="body" cols="30" rows="5"
-                                      class="form-control"></textarea>
-                            </div>
-
-                            <button type="submit" class="btn btn-default">Submit</button>
-                        </form>
-                    @else
-                        <p class="text-center">Please <a href="{{ route('login') }}">sign in</a> to participate in the
-                            discussion.</p>
-                    @endif
 
                 </div>
 
@@ -56,7 +41,9 @@
                             <p>
                                 This thread was published {{ $thread->created_at->diffForHumans() }} by
                                 <a href="#">{{ $thread->creator->name }}</a>, and currently
-                                has <span v-text="repliesCount"></span> {{ str_plural('comment', $thread->replies_count) }}.
+                                has <span
+                                        v-text="repliesCount"></span> {{ str_plural('comment', $thread->replies_count) }}
+                                .
                             </p>
                         </div>
                     </div>
