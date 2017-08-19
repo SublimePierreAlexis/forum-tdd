@@ -14,8 +14,10 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     <script>
-        window.Laravel = {!! json_encode([
-            'csrfToken' => csrf_token()
+        window.App = {!! json_encode([
+            'csrfToken' => csrf_token(),
+            'signedIn' => Auth::check(),
+            'user' => Auth::user()
         ]) !!};
     </script>
 
