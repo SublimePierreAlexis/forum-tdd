@@ -30,6 +30,7 @@
                         @endif
 
                         <li><a href="/threads?popular=1">Popular threads</a></li>
+                        <li><a href="/threads?unanswered=1">Unanswered threads</a></li>
                     </ul>
                 </li>
 

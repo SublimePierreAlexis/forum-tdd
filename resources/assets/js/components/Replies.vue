@@ -36,6 +36,8 @@
             refresh({data}) {
                 this.dataSet = data;
                 this.items = data.data;
+
+                window.scrollTo(0, 0);
             },
 
             url(page) {
@@ -43,6 +45,7 @@
                     let query = location.search.match(/page=(\d+)/);
                     page = query ? query[1] : 1;
                 }
+
                 return `${location.pathname}/replies?page=${page}`;
             }
         }

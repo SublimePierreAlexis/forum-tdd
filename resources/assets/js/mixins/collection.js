@@ -4,7 +4,7 @@ export default {
             items: []
         }
     },
-    
+
     methods: {
         add(item) {
             this.items.push(item);
