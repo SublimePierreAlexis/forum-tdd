@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Inspections\Spam;
 use App\Reply;
-use App\Spam;
 use App\Thread;
 use Illuminate\Http\Request;
 
@@ -23,9 +23,9 @@ class RepliesController extends Controller
     }
 
     /**
-     * @param        $channelId
-     * @param Thread $thread
-     * @param Spam   $spam
+     * @param integer $channelId
+     * @param Thread  $thread
+     * @param Spam    $spam
      *
      * @return Thread|\Illuminate\Database\Eloquent\Model
      */
