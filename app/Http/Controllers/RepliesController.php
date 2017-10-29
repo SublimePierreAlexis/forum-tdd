@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Inspections\Spam;
 use App\Reply;
 use App\Thread;
-use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class RepliesController extends Controller
 {
@@ -25,28 +25,23 @@ class RepliesController extends Controller
     /**
      * @param integer $channelId
      * @param Thread  $thread
-     * @param Spam    $spam
      *
      * @return Thread|\Illuminate\Database\Eloquent\Model
      */
-    public function store($channelId, Thread $thread, Spam $spam)
+    public function store($channelId, Thread $thread)
     {
-        $this->validate(request(), [
-            'body' => 'required',
-        ]);
+        try {
+            $this->validateReply();
 
-        $spam->detect(request('body'));
-
-        $reply = $thread->addReply([
-            'body'    => request('body'),
-            'user_id' => auth()->id(),
-        ]);
-
-        if (request()->expectsJson()) {
-            return $reply->load('owner');
+            $reply = $thread->addReply([
+                'body'    => request('body'),
+                'user_id' => auth()->id(),
+            ]);
+        } catch (\Exception $e) {
+            return response('Sorry, you reply could not be save at this time.', Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        return back()->with('flash', 'Your reply has been left.');
+        return $reply->load('owner');
     }
 
     /**
@@ -55,6 +50,8 @@ class RepliesController extends Controller
     public function update(Reply $reply)
     {
         $this->authorize('update', $reply);
+
+        $this->validateReply();
 
         $reply->update(request(['body']));
     }
@@ -75,5 +72,15 @@ class RepliesController extends Controller
         }
 
         return back();
+    }
+
+    /**
+     * Detect spam on replies
+     */
+    protected function validateReply()
+    {
+        $this->validate(request(), ['body' => 'required']);
+
+        resolve(Spam::class)->detect(request('body'));
     }
 }
