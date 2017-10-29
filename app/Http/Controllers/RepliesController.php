@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreatePostRequest;
 use App\Reply;
 use App\Thread;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Gate;
 
 class RepliesController extends Controller
 {
@@ -23,34 +23,18 @@ class RepliesController extends Controller
     }
 
     /**
-     * @param integer $channelId
-     * @param Thread  $thread
+     * @param integer           $channelId
+     * @param Thread            $thread
+     * @param CreatePostRequest $form
      *
      * @return Thread|\Illuminate\Database\Eloquent\Model
      */
-    public function store($channelId, Thread $thread)
+    public function store($channelId, Thread $thread, CreatePostRequest $form)
     {
-        if (Gate::denies('create', new Reply)) {
-            return response(
-                'You are posting too frequently. Please take a break ;)',
-                Response::HTTP_UNPROCESSABLE_ENTITY
-            );
-        }
-
-        try {
-            $this->authorize('create', new Reply);
-
-            $this->validate(request(), ['body' => 'required|spamfree']);
-
-            $reply = $thread->addReply([
-                'body'    => request('body'),
-                'user_id' => auth()->id(),
-            ]);
-        } catch (\Exception $e) {
-            return response('Sorry, you reply could not be save at this time.', Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
-        return $reply->load('owner');
+        return $thread->addReply([
+            'body'    => request('body'),
+            'user_id' => auth()->id(),
+        ])->load('owner');
     }
 
     /**
