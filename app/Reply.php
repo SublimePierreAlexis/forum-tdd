@@ -2,13 +2,16 @@
 
 namespace App;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property mixed favorites
- * @property mixed user_id
- * @property mixed thread
- * @property mixed id
+ * @property Collection favorites
+ * @property integer    user_id
+ * @property Thread     thread
+ * @property integer    id
+ * @property mixed      created_at
  */
 class Reply extends Model
 {
@@ -56,6 +59,11 @@ class Reply extends Model
     public function thread()
     {
         return $this->belongsTo(Thread::class);
+    }
+
+    public function wasJustPublished()
+    {
+        return $this->created_at->gt(Carbon::now()->subMinute());
     }
 
     /**

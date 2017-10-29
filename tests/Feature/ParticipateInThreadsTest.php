@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Http\Response;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -103,7 +104,7 @@ class ParticipateInThreadsTest extends TestCase
             ->patch("/replies/{$reply->id}")
             ->assertStatus(403);
     }
-    
+
     /** @test */
     public function replies_that_contain_spam_may_not_be_created()
     {
@@ -114,8 +115,24 @@ class ParticipateInThreadsTest extends TestCase
             'body' => 'Yahoo Customer Support',
         ]);
 
-        $this->expectException(\Exception::class);
+        $this->post($thread->path() . '/replies', $reply->toArray())
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
 
-        $this->post($thread->path() . '/replies', $reply->toArray());
+    /** @test */
+    public function users_may_only_reply_a_maximum_of_once_per_minute()
+    {
+        $this->signIn();
+
+        $thread = create('App\Thread');
+        $reply = make('App\Reply', [
+            'body' => 'My simple reply.',
+        ]);
+
+        $this->post($thread->path() . '/replies', $reply->toArray())
+            ->assertStatus(Response::HTTP_OK);
+
+        $this->post($thread->path() . '/replies', $reply->toArray())
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 }

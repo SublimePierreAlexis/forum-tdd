@@ -70,11 +70,22 @@ class User extends Authenticatable
         return sprintf("users.%s.visits.%s", auth()->id(), $this->id);
     }
 
+    /**
+     * @param $thread
+     */
     public function read($thread)
     {
         cache()->forever(
             auth()->user()->visitedThreadCacheKey($thread),
             Carbon::now()
         );
+    }
+
+    /**
+     * @return null|Reply
+     */
+    public function lastReply()
+    {
+        return $this->hasOne(Reply::class)->latest();
     }
 }
