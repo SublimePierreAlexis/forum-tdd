@@ -13,7 +13,10 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        //
+        'App\Events\ThreadReceivedNewReply' => [
+            'App\listeners\NotifyMentionedUsers',
+            'App\Listeners\NotifySubscribers',
+        ],
     ];
 
     /**
@@ -24,7 +27,6 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
-
         //
     }
 }

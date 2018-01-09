@@ -73,4 +73,11 @@ class Reply extends Model
     {
         return $this->thread->path() . "#reply-{$this->id}";
     }
+
+    public function mentionedusers()
+    {
+        preg_match_all('/\@([^\s\.]+)/', $this->body, $matches);
+
+        return $matches[1];
+    }
 }
