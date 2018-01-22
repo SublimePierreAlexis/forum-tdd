@@ -42,19 +42,15 @@ class RepliesController extends Controller
     /**
      * @param Reply $reply
      *
-     * @return null|\Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     * @return void
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update(Reply $reply)
     {
         $this->authorize('update', $reply);
 
-        try {
-            $this->validate(request(), ['body' => 'required|spamfree']);
-            $reply->update(request(['body']));
-        } catch (\Exception $e) {
-            return response('Sorry, you reply could not be save at this time.', Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
+        $this->validate(request(), ['body' => 'required|spamfree']);
+        $reply->update(request(['body']));
     }
 
     /**

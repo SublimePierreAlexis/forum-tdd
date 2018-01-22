@@ -59576,6 +59576,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -60043,7 +60045,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })], 1) : _vm._e()])]), _vm._v(" "), _c('div', {
     staticClass: "panel-body"
-  }, [(_vm.editing) ? _c('div', [_c('div', {
+  }, [(_vm.editing) ? _c('div', [_c('form', {
+    on: {
+      "submit": _vm.update
+    }
+  }, [_c('div', {
     staticClass: "form-group"
   }, [_c('textarea', {
     directives: [{
@@ -60053,6 +60059,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       expression: "body"
     }],
     staticClass: "form-control",
+    attrs: {
+      "required": ""
+    },
     domProps: {
       "value": (_vm.body)
     },
@@ -60063,10 +60072,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }
   })]), _vm._v(" "), _c('button', {
-    staticClass: "btn btn-xs btn-primary",
-    on: {
-      "click": _vm.update
-    }
+    staticClass: "btn btn-xs btn-primary"
   }, [_vm._v("Update")]), _vm._v(" "), _c('button', {
     staticClass: "btn btn-xs btn-link",
     on: {
@@ -60074,7 +60080,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.editing = false
       }
     }
-  }, [_vm._v("Cancel")])]) : _c('div', {
+  }, [_vm._v("Cancel")])])]) : _c('div', {
     domProps: {
       "textContent": _vm._s(_vm.body)
     }

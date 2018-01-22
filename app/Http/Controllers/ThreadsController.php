@@ -9,7 +9,9 @@ use Illuminate\Http\Request;
 
 class ThreadsController extends Controller
 {
-
+    /**
+     * Create a ThreadsController instance.
+     */
     public function __construct()
     {
         $this->middleware('auth')->except([
