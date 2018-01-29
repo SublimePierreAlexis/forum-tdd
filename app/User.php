@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property int    id
  * @property string name
  * @property string email
+ * @property string  avatar_path
  */
 class User extends Authenticatable
 {
@@ -21,7 +22,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'avatar_path'
+        'name', 'email', 'password', 'avatar_path',
     ];
 
     /**
@@ -63,6 +64,7 @@ class User extends Authenticatable
 
     /**
      * @param Thread $thread
+     *
      * @return string
      */
     public function visitedThreadCacheKey($thread)
@@ -79,6 +81,14 @@ class User extends Authenticatable
             auth()->user()->visitedThreadCacheKey($thread),
             Carbon::now()
         );
+    }
+
+    /**
+     * @return string
+     */
+    public function avatar()
+    {
+        return asset('storage/'. $this->avatar_path ?: 'avatars/default.jpg');
     }
 
     /**
