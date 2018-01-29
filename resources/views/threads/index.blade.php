@@ -10,19 +10,21 @@
             </div>
 
             <div class="col-md-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        Trending threads
-                    </div>
+                @if(count($trending))
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Trending threads
+                        </div>
 
-                    <div class="panel-body">
-                        @foreach($trending as $thread)
-                            <li class="list-group-item">
-                                <a href="{{ url($thread->path) }}">{{ $thread->title }}</a>
-                            </li>
-                        @endforeach
+                        <div class="panel-body">
+                            @foreach($trending as $thread)
+                                <li class="list-group-item">
+                                    <a href="{{ url($thread->path) }}">{{ $thread->title }}</a>
+                                </li>
+                            @endforeach
+                        </div>
                     </div>
-                </div>
+                @endif
             </div>
         </div>
     </div>
