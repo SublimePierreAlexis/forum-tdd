@@ -34,6 +34,10 @@ class User extends Authenticatable
         'password', 'remember_token', 'email',
     ];
 
+    protected $casts = [
+        'confirmed' => 'boolean'
+    ];
+
     /**
      * Get the route key name for Laravel.
      *
@@ -70,6 +74,13 @@ class User extends Authenticatable
     public function visitedThreadCacheKey($thread)
     {
         return sprintf("users.%s.visits.%s", auth()->id(), $this->id);
+    }
+
+    public function confirm()
+    {
+        $this->confirmed = true;
+
+        $this->save();
     }
 
     /**
