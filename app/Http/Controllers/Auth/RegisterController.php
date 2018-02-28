@@ -68,18 +68,19 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::forceCreate([
-            'name'     => $data['name'],
-            'email'    => $data['email'],
-            'password' => bcrypt($data['password']),
-            'confirmation_token' => str_random(25),
+            'name'               => $data['name'],
+            'email'              => $data['email'],
+            'password'           => bcrypt($data['password']),
+            'confirmation_token' => str_limit(md5($data['email'] . str_random()), 25, ''),
         ]);
     }
 
     /**
      * The user has been registered.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  mixed  $user
+     * @param  \Illuminate\Http\Request $request
+     * @param  mixed                    $user
+     *
      * @return mixed
      */
     protected function registered(Request $request, $user)

@@ -10,7 +10,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property int    id
  * @property string name
  * @property string email
- * @property string  avatar_path
+ * @property string avatar_path
+ * @property bool   confirmed
+ * @property null   confirmation_token
  */
 class User extends Authenticatable
 {
@@ -79,6 +81,7 @@ class User extends Authenticatable
     public function confirm()
     {
         $this->confirmed = true;
+        $this->confirmation_token = null;
 
         $this->save();
     }
