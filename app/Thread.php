@@ -38,7 +38,7 @@ class Thread extends Model
      */
     public function path()
     {
-        return "/threads/{$this->channel->slug}/{$this->id}";
+        return "/threads/{$this->channel->slug}/{$this->slug}";
     }
 
     /**
@@ -141,11 +141,15 @@ class Thread extends Model
      *
      * @return bool
      */
-    public function hasUpdatesFor($user = null)
+    public function hasUpdatesFor($user)
     {
-        $user = $user ?: auth()->user();
         $key = $user->visitedThreadCacheKey($this);
 
         return $this->updated_at > cache($key);
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
     }
 }
