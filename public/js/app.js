@@ -27293,14 +27293,14 @@ window.Vue = __webpack_require__(154);
 var authorizations = __webpack_require__(157);
 
 Vue.prototype.authorize = function () {
-    if (!window.App.signedId) return false;
+    if (!window.App.signedIn) return false;
 
     for (var _len = arguments.length, params = Array(_len), _key = 0; _key < _len; _key++) {
         params[_key] = arguments[_key];
     }
 
     if (typeof params[0] === 'string') {
-        authorizations[params[0]](params[1]);
+        return authorizations[params[0]](params[1]);
     }
 
     return params[0](window.App.user);
@@ -59867,7 +59867,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             editing: false,
             id: this.data.id,
             body: this.data.body,
-            isBest: false,
+            isBest: this.data.isBest,
             reply: this.data
         };
     },
@@ -59878,6 +59878,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return __WEBPACK_IMPORTED_MODULE_1_moment___default()(this.data.created_at).fromNow() + '...';
         }
     },
+
+    created: function created() {
+        var _this = this;
+
+        window.events.$on('best-reply-selected', function (id) {
+            _this.isBest = id === _this.id;
+        });
+    },
+
 
     methods: {
         update: function update() {
@@ -59897,7 +59906,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.$emit('deleted', this.data.id);
         },
         markBestReply: function markBestReply() {
-            this.isBest = true;
+            axios.post('/replies/' + this.data.id + '/best');
+
+            window.events.$emit('best-reply-selected', this.data.id);
         }
     }
 });
@@ -60471,14 +60482,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             body: ''
         };
     },
-
-
-    computed: {
-        signedIn: function signedIn() {
-            return window.App.signedIn;
-        }
-    },
-
     mounted: function mounted() {
         $('#body').atwho({
             at: "@",
