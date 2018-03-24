@@ -4,15 +4,17 @@ namespace App;
 
 use App\Events\ThreadReceivedNewReply;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 /**
- * @property integer id
- * @property string  title
- * @property mixed   creator
- * @property mixed   replies
- * @property mixed   channel
- * @property integer user_id
- * @property mixed   subscriptions
+ * @property integer    id
+ * @property string     title
+ * @property User       creator
+ * @property Collection replies
+ * @property Channel    channel
+ * @property integer    user_id
+ * @property Collection subscriptions
+ * @property integer    best_reply_id
  */
 class Thread extends Model
 {
@@ -171,5 +173,15 @@ class Thread extends Model
         }
 
         $this->attributes['slug'] = $slug;
+    }
+
+    /**
+     * Set a best reply
+     *
+     * @param Reply $reply
+     */
+    public function markBestReply(Reply $reply)
+    {
+        $reply->thread->update(['best_reply_id' => $reply->id]);
     }
 }

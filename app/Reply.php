@@ -11,7 +11,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property integer    user_id
  * @property Thread     thread
  * @property integer    id
- * @property mixed      created_at
+ * @property integer    created_at
+ * @property string     body
  */
 class Reply extends Model
 {
@@ -74,15 +75,28 @@ class Reply extends Model
         return $this->thread->path() . "#reply-{$this->id}";
     }
 
+    /**
+     * Set the body attribute
+     *
+     * @param $body
+     */
     public function setBodyAttribute($body)
     {
         $this->attributes['body'] = preg_replace('/@([\w\-]+)/', '<a href="/profiles/$1">$0</a>', $body);
     }
 
+    /**
+     * @return mixed
+     */
     public function mentionedusers()
     {
         preg_match_all('/@([\w\-]+)/', $this->body, $matches);
 
         return $matches[1];
+    }
+
+    public function isBest()
+    {
+        return $this->thread->best_reply_id == $this->id;
     }
 }
