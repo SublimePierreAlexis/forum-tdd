@@ -25,7 +25,7 @@ class RegistrationTest extends TestCase
             'password_confirmation' => 'foobar',
         ]);
 
-        Mail::assertSent(PleaseConfirmYouEmail::class);
+        Mail::assertQueued(PleaseConfirmYouEmail::class);
     }
 
     /** @test */
