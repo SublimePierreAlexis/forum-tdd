@@ -59630,7 +59630,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             repliesCount: this.thread.replies_count,
-            locked: this.thread.locked
+            locked: this.thread.locked,
+            editing: false
         };
     },
 
@@ -59886,8 +59887,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             editing: false,
             id: this.reply.id,
             body: this.reply.body,
-            isBest: this.reply.isBest,
-            reply: this.reply
+            isBest: this.reply.isBest
         };
     },
 

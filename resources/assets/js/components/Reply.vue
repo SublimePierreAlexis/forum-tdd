@@ -55,8 +55,7 @@
                 editing: false,
                 id: this.reply.id,
                 body: this.reply.body,
-                isBest: this.reply.isBest,
-                reply: this.reply
+                isBest: this.reply.isBest
             };
         },
 
