@@ -5,6 +5,7 @@ namespace App;
 use App\Events\ThreadReceivedNewReply;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Laravel\Scout\Searchable;
 
 /**
  * @property integer    id
@@ -18,7 +19,7 @@ use Illuminate\Support\Collection;
  */
 class Thread extends Model
 {
-    use RecordsActivity;
+    use RecordsActivity, Searchable;
 
     protected $guarded = [];
 
