@@ -95,13 +95,34 @@ class Reply extends Model
         return $matches[1];
     }
 
+    /**
+     * Tell is the answer is the best.
+     *
+     * @return bool
+     */
     public function isBest()
     {
         return $this->thread->best_reply_id == $this->id;
     }
 
+    /**
+     * Get the isBest attribute.
+     * @return bool
+     */
     public function getIsBestAttribute()
     {
         return $this->isBest();
+    }
+
+    /**
+     * Get the Body attribute.
+     *
+     * @param $body
+     *
+     * @return mixed
+     */
+    public function getBodyAttribute($body)
+    {
+        return \Purify::clean($body);
     }
 }

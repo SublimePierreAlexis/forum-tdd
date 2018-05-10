@@ -10,19 +10,15 @@ class SearchController extends Controller
 {
     public function show(Trending $trending)
     {
-        config(['scout.driver' => 'algolia']);
-
-        $search = request('q');
-
-        $threads = Thread::search($search)->paginate(25);
+        $threads = Thread::search(request('q'))->paginate(25);
 
         if (request()->expectsJson()) {
             return $threads;
         }
 
-        return view('threads.index', [
-            'threads' => $threads,
+        return view('threads.search', [
             'trending' => $trending->get(),
+            'thread' => $threads,
         ]);
     }
 }
